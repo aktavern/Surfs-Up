@@ -51,7 +51,7 @@ def welcome():
 
 @app.route("/api/v1.0/precipitation")
 def precipitation():
-    """Return JSON of all dates and prcp"""
+    """Return dict of all dates and prcp"""
 
     # Query all dates and prcp
     prec_results = session.query(Measurement.date, Measurement.prcp).all()
@@ -63,7 +63,7 @@ def precipitation():
 
 @app.route("/api/v1.0/stations")
 def stations():
-    """Return JSON of all stations"""
+    """Return list of all stations"""
 
     # Query all dates and prcp
     station_results = session.query(Station.station).all()
@@ -76,7 +76,7 @@ def stations():
 
 @app.route("/api/v1.0/tobs")
 def tobs():
-    """Return JSON of dates and tempatures a year from last data point"""
+    """Return list of dates and tempatures a year from last data point"""
     # Calculate date 1 year ago from last point
     last_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first()
     twelve_months = dt.date(2017,8,23) - dt.timedelta(days=365)
@@ -104,7 +104,7 @@ def start(start):
 
 @app.route("/api/v1.0/<start>/<end>")
 def startend(start,end):
-    """Return JSON of dates and tempatures a year from last data point"""
+    """Return JSON of dates and tempatures between inputted start and end dates"""
 
     start_end_data = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs), Measurement.date).\
         filter(Measurement.date >= start, Measurement.date <= end).\
